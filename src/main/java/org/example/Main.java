@@ -54,17 +54,17 @@ public class Main {
 
             int oldX = x; // save old position x
             int oldY = y; // save old position y
-            switch (keyStroke.getKeyType()) {
-                case ArrowDown:
+            switch (keyStroke.getCharacter()) {//if arrows "keyStroke.getKeyType()"
+                case 's'://ArrowDown
                     y += 1;
                     break;
-                case ArrowUp:
+                case 'w'://ArrowUp
                     y -= 1;
                     break;
-                case ArrowRight:
+                case 'd'://ArrowRight
                     x += 1;
                     break;
-                case ArrowLeft:
+                case 'a'://ArrowLeft
                     x -= 1;
                     break;
             }
