@@ -10,7 +10,7 @@ public class Main {
         DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory();
         Terminal terminal = terminalFactory.createTerminal();
         terminal.setCursorVisible(false);
-
+        // test comment
         int x = 5;
         int y = 5;
         final char player = 'X';
