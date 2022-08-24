@@ -1,5 +1,6 @@
 package org.example;
 
+
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
@@ -9,16 +10,24 @@ import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 public class Main {
     public static void main(String[] args) throws Exception {
         DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory();
         Terminal terminal = terminalFactory.createTerminal();
+
+
         terminal.setCursorVisible(false);
         // test comment
         int x = 5;
         int y = 5;
-        final char player = 'X';
+        final char player = '\u263a';
         final char block = '\u2588';
+        final char bomb = 'O';
         terminal.setCursorPosition(x, y);
         terminal.putCharacter(player);
 //Points start (Caroline)
@@ -39,6 +48,12 @@ public class Main {
         }
 //Points end
 
+        //monsters
+        List<Position> monsters = new ArrayList<>();
+        monsters.add(new Position(3, 3));
+        monsters.add(new Position(23, 23));
+        monsters.add(new Position(23, 3));
+
         // Create obstacles array
         Position[] obstacles = new Position[10];
         for(int i = 0;i<10;i++){
@@ -51,7 +66,19 @@ public class Main {
             terminal.putCharacter(block);
         }
 
+        //random position för bomben
+        Random r = new Random();
+        Position bombPosition = new Position(r.nextInt(80), r.nextInt(24));
+
+        terminal.setCursorPosition(bombPosition.x, bombPosition.y);
+
+        terminal.putCharacter(bomb);
+
+        terminal.flush();
+
+
         boolean continueReadingInput = true;
+
         while (continueReadingInput) {
 
             KeyStroke keyStroke = null;
@@ -75,6 +102,7 @@ public class Main {
 
             int oldX = x; // save old position x
             int oldY = y; // save old position y
+
             switch (keyStroke.getCharacter()) {//if arrows "keyStroke.getKeyType()"
                 case 's'://ArrowDown
                     y += 1;
@@ -121,7 +149,20 @@ public class Main {
                 terminal.setCursorPosition(x, y);
                 terminal.putCharacter(player);
             }
+            // check if player runs into the bomb
+            if (bombPosition.x == x && bombPosition.y == y) {
+                Random l = new Random();
+                Position bombPosition1 = new Position(l.nextInt(20), l.nextInt(24));
+
+                terminal.setCursorPosition(bombPosition.x, bombPosition.y);
+
+                terminal.putCharacter(bomb);
+                terminal.bell();
+                terminal.close();
+                continueReadingInput = false;
+            }
             terminal.flush();
         }
+
     }
 }
