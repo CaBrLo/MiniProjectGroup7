@@ -5,6 +5,10 @@ import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 
+import java.awt.image.AreaAveragingScaleFilter;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) throws Exception {
         DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory();
@@ -17,6 +21,23 @@ public class Main {
         final char block = '\u2588';
         terminal.setCursorPosition(x, y);
         terminal.putCharacter(player);
+//Points start (Caroline)
+        //
+        List<Position> points = new ArrayList<>();
+        points.add(new Position(4,4));
+        points.add(new Position(25, 10));
+        points.add(new Position(10,20));
+        points.add(new Position(5,10));
+        points.add(new Position(19,4));
+
+        int score = 0;
+
+        for (Position point : points)
+        {
+            terminal.setCursorPosition(point.x, point.y);
+            terminal.putCharacter('$');
+        }
+//Points end
 
         // Create obstacles array
         Position[] obstacles = new Position[10];
@@ -74,6 +95,22 @@ public class Main {
                     crashIntoObstacle = true;
                 }
             }
+// Score start (Caroline)
+            for (Position p : points){
+                if (p.x == x && p.y == y)
+                {
+                    score++;
+                }
+            }
+            //System.out.println(score);
+            String scoreString = Integer.toString(score);
+
+
+                terminal.setCursorPosition(45,2);
+                terminal.putCharacter(scoreString.charAt(0));
+
+            terminal.flush();
+// Score end
 
             if (crashIntoObstacle) {
                 x = oldX;
