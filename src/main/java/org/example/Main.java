@@ -61,26 +61,24 @@ public class Main {
         List<Position> monsters = new ArrayList<>();
         monsters.add(new Position(23, 23));
 
-
-
         //Tobbe jobbar start
         List<Position>obstacles=new ArrayList<>();
         //Position[] obstacles = new Position[10];
-        HorizontalObstacle(0,0,80,terminal,block,obstacles);//top frame
+        HorizontalObstacle(0,1,80,terminal,block,obstacles);//top frame
         HorizontalObstacle(0,23,80,terminal,block,obstacles);//bottom frame
-        HorizontalObstacle(5,5,20,terminal,block,obstacles);
-        HorizontalObstacle(5,18,20,terminal,block,obstacles);
-        HorizontalObstacle(55,5,20,terminal,block,obstacles);
-        HorizontalObstacle(55,18,20,terminal,block,obstacles);
+        HorizontalObstacle(5,6,20,terminal,block,obstacles);
+        HorizontalObstacle(5,19,20,terminal,block,obstacles);
+        HorizontalObstacle(55,6,20,terminal,block,obstacles);
+        HorizontalObstacle(55,19,20,terminal,block,obstacles);
 
-        VerticalObstacle(0,0,23,terminal,block,obstacles);//left frame
-        VerticalObstacle(79,0,23,terminal,block,obstacles);//right frame
-        VerticalObstacle(14,9,6,terminal,block,obstacles);
-        VerticalObstacle(65,9,6,terminal,block,obstacles);
-        VerticalObstacle(35,0,6,terminal,block,obstacles);//left mid divider
-        VerticalObstacle(35,12,12,terminal,block,obstacles);
-        VerticalObstacle(45,0,12,terminal,block,obstacles);//top right mid divider
-        VerticalObstacle(45,18,15,terminal,block,obstacles);
+        VerticalObstacle(0,1,23,terminal,block,obstacles);//left frame
+        VerticalObstacle(79,1,23,terminal,block,obstacles);//right frame
+        VerticalObstacle(14,10,6,terminal,block,obstacles);
+        VerticalObstacle(65,10,6,terminal,block,obstacles);
+        VerticalObstacle(35,1,6,terminal,block,obstacles);//left mid divider
+        VerticalObstacle(35,13,12,terminal,block,obstacles);
+        VerticalObstacle(45,1,12,terminal,block,obstacles);//top right mid divider
+        VerticalObstacle(45,19,15,terminal,block,obstacles);
 
         //Tobbe jobbar end
 
