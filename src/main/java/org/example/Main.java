@@ -38,24 +38,38 @@ public class Main {
 
         terminal.setCursorPosition(x, y);
         terminal.putCharacter(player);
-        //Points start (Caroline)
-        //
-        List<Position> points = new ArrayList<>();
-        points.add(new Position(4,4));
-        points.add(new Position(25, 10));
-        points.add(new Position(10,20));
-        points.add(new Position(5,10));
-        points.add(new Position(19,4));
 
+        //Score and points start (Caroline)
         int score = 0;
-
-        for (Position point : points)
+        String scoreHeader = "Score: ";
+        for(int i = 0; i < scoreHeader.length(); i++)
         {
+            terminal.setCursorPosition(68+i,0);
+            terminal.putCharacter(scoreHeader.charAt(i));
+        }
+
+        List<Position> fivePoints = new ArrayList<>();
+        fivePoints.add(new Position(4,4));
+        fivePoints.add(new Position(75, 10));
+        fivePoints.add(new Position(70,20));
+        fivePoints.add(new Position(60,10));
+        fivePoints.add(new Position(19,4));
+        for (Position point : fivePoints) {
             terminal.setCursorPosition(point.x, point.y);
             terminal.putCharacter('$');
-
         }
-        //Points end
+
+        List<Position> tenPoints = new ArrayList<>();
+        tenPoints.add(new Position(8,4));
+        tenPoints.add(new Position(25, 10));
+        tenPoints.add(new Position(10,20));
+        tenPoints.add(new Position(5,10));
+        tenPoints.add(new Position(72,8));
+        for (Position point : tenPoints) {
+            terminal.setCursorPosition(point.x, point.y);
+            terminal.putCharacter('£');
+        }
+        //Score and points end
 
         //monsters
         List<Position> monsters = new ArrayList<>();
@@ -139,22 +153,31 @@ public class Main {
                     crashIntoObstacle = true;
                 }
             }
-// Score start (Caroline)
-            for (Position p : points){
+// Score & points start (Caroline)
+            for (Position p : fivePoints){
                 if (p.x == x && p.y == y)
                 {
-                    score++;
+                    score+=5;
+                    p.x = 0;    //moves the point's location to 0,0
+                    p.y = 0;
                 }
             }
-            //System.out.println(score);
+            for (Position p : tenPoints){
+                if (p.x == x && p.y == y)
+                {
+                    score+=10;
+                    p.x = 0;    //moves the point's location to 0,0
+                    p.y = 0;
+                }
+            }
+
             String scoreString = Integer.toString(score);
-
-
-                terminal.setCursorPosition(45,2);
-                terminal.putCharacter(scoreString.charAt(0));
-
-            terminal.flush();
-            // Score end
+            for (int i = 0; i < scoreString.length(); i++)
+            {
+                terminal.setCursorPosition(75+i,0);
+                terminal.putCharacter(scoreString.charAt(i));
+            }
+        // Score & points end
 
             if (crashIntoObstacle) {
                 x = oldX;
