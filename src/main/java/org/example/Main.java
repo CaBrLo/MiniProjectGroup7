@@ -1,6 +1,11 @@
 package org.example;
 
 
+import com.googlecode.lanterna.SGR;
+import com.googlecode.lanterna.Symbols;
+import com.googlecode.lanterna.TextColor;
+import com.googlecode.lanterna.graphics.TextGraphics;
+import com.googlecode.lanterna.graphics.TextImage;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
@@ -10,15 +15,15 @@ import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
+
 import java.util.Random;
 
 public class Main {
     public static void main(String[] args) throws Exception {
         DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory();
         Terminal terminal = terminalFactory.createTerminal();
+
+        TextGraphics tg = terminal.newTextGraphics();
 
 
         terminal.setCursorVisible(false);
@@ -28,9 +33,10 @@ public class Main {
         final char player = '\u263a';
         final char block = '\u2588';
         final char bomb = 'O';
+
         terminal.setCursorPosition(x, y);
         terminal.putCharacter(player);
-//Points start (Caroline)
+        //Points start (Caroline)
         //
         List<Position> points = new ArrayList<>();
         points.add(new Position(4,4));
@@ -45,14 +51,15 @@ public class Main {
         {
             terminal.setCursorPosition(point.x, point.y);
             terminal.putCharacter('$');
+
         }
-//Points end
+        //Points end
 
         //monsters
         List<Position> monsters = new ArrayList<>();
-        monsters.add(new Position(3, 3));
         monsters.add(new Position(23, 23));
-        monsters.add(new Position(23, 3));
+
+
 
         // Create obstacles array
         Position[] obstacles = new Position[10];
@@ -138,7 +145,7 @@ public class Main {
                 terminal.putCharacter(scoreString.charAt(0));
 
             terminal.flush();
-// Score end
+            // Score end
 
             if (crashIntoObstacle) {
                 x = oldX;
@@ -161,6 +168,38 @@ public class Main {
                 terminal.close();
                 continueReadingInput = false;
             }
+
+            //handling monsters
+            for (Position monster : monsters) {
+                terminal.setCursorPosition(monster.x, monster.y);
+                terminal.putCharacter(' ');
+
+                if (x > monster.x) {
+                    monster.x++;
+                }
+                else if (x < monster.x) {
+                    monster.x--;
+                }
+                if (y > monster.y) {
+                    monster.y++;
+                }
+                else if (y < monster.y) {
+                    monster.y--;
+                }
+
+                terminal.setCursorPosition(monster.x, monster.y);
+                terminal.putCharacter('X');
+            }
+
+            // Is the player alive?
+            for (Position monster : monsters) {
+                if (monster.x == x && monster.y == y) {
+                    continueReadingInput = false;
+                    terminal.bell();
+                    System.out.println("Game Over!");
+                }
+            }
+
             terminal.flush();
         }
 
