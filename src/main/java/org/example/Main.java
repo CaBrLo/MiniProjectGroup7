@@ -18,6 +18,8 @@ import java.util.List;
 
 import java.util.Random;
 
+import java.io.IOException;
+
 public class Main {
     public static void main(String[] args) throws Exception {
         DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory();
@@ -28,8 +30,8 @@ public class Main {
 
         terminal.setCursorVisible(false);
         // test comment
-        int x = 5;
-        int y = 5;
+        int x = 2;
+        int y = 2;
         final char player = '\u263a';
         final char block = '\u2588';
         final char bomb = 'O';
@@ -61,17 +63,26 @@ public class Main {
 
 
 
-        // Create obstacles array
-        Position[] obstacles = new Position[10];
-        for(int i = 0;i<10;i++){
-            obstacles[i] = new Position(10+i, 10);
-        }
+        //Tobbe jobbar start
+        List<Position>obstacles=new ArrayList<>();
+        //Position[] obstacles = new Position[10];
+        HorizontalObstacle(0,0,80,terminal,block,obstacles);//top frame
+        HorizontalObstacle(0,23,80,terminal,block,obstacles);//bottom frame
+        HorizontalObstacle(5,5,20,terminal,block,obstacles);
+        HorizontalObstacle(5,18,20,terminal,block,obstacles);
+        HorizontalObstacle(55,5,20,terminal,block,obstacles);
+        HorizontalObstacle(55,18,20,terminal,block,obstacles);
 
-        // Use obstacles array to print to lanterna
-        for (Position p : obstacles) {
-            terminal.setCursorPosition(p.x, p.y);
-            terminal.putCharacter(block);
-        }
+        VerticalObstacle(0,0,23,terminal,block,obstacles);//left frame
+        VerticalObstacle(79,0,23,terminal,block,obstacles);//right frame
+        VerticalObstacle(14,9,6,terminal,block,obstacles);
+        VerticalObstacle(65,9,6,terminal,block,obstacles);
+        VerticalObstacle(35,0,6,terminal,block,obstacles);//left mid divider
+        VerticalObstacle(35,12,12,terminal,block,obstacles);
+        VerticalObstacle(45,0,12,terminal,block,obstacles);//top right mid divider
+        VerticalObstacle(45,18,15,terminal,block,obstacles);
+
+        //Tobbe jobbar end
 
         //random position för bomben
         Random r = new Random();
@@ -203,5 +214,37 @@ public class Main {
             terminal.flush();
         }
 
+    }
+    public static void HorizontalObstacle(int x,int y,int length,Terminal terminal,char block, List<Position> obstacles  ) throws IOException {
+
+        // Create obstacles array
+        for(int i = 0;i<length;i++){
+            obstacles.add(new Position(x,y));
+            x++;
+            //obstacles[count] = new Position(x+i, y);
+
+        }
+
+        // Use obstacles array to print to lanterna
+        for (Position p : obstacles) {
+            terminal.setCursorPosition(p.x, p.y);
+            terminal.putCharacter(block);
+        }
+    }
+    public static void VerticalObstacle(int x,int y,int length,Terminal terminal,char block, List<Position> obstacles  ) throws IOException {
+
+        // Create obstacles array
+        for(int i = 0;i<length;i++){
+            obstacles.add(new Position(x,y));
+            y++;
+            //obstacles[count] = new Position(x+i, y);
+
+        }
+
+        // Use obstacles array to print to lanterna
+        for (Position p : obstacles) {
+            terminal.setCursorPosition(p.x, p.y);
+            terminal.putCharacter(block);
+        }
     }
 }
