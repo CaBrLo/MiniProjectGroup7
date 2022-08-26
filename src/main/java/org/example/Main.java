@@ -15,15 +15,15 @@ public class Main {
         Terminal terminal = terminalFactory.createTerminal();
         TextGraphics tg = terminal.newTextGraphics();
         terminal.setCursorVisible(false);
-        // test comment
+
         int x = 2;
         int y = 2;
-        final char player = '\u263a';
+        final char dev = '\u263a';
         final char block = '\u2588';
-        final char bomb = '¤';
+        final char bug = '¤';
 
         terminal.setCursorPosition(x, y);
-        terminal.putCharacter(player);
+        terminal.putCharacter(dev);
 
         //Score and points start (Caroline)
         int score = 0;
@@ -57,10 +57,10 @@ public class Main {
         //Score and points end
 
         //monsters
-        List<Position> monsters = new ArrayList<>();
-        monsters.add(new Position(23, 21));
+        List<Position> deadline = new ArrayList<>();
+        deadline.add(new Position(23, 21));
 
-        //Tobbe jobbar start
+        //Tobbe jobbar start spelplan
         List<Position> obstacles = new ArrayList<>();
         //Position[] obstacles = new Position[10];
         HorizontalObstacle(0, 1, 80, terminal, block, obstacles);//top frame
@@ -78,13 +78,12 @@ public class Main {
         VerticalObstacle(35, 13, 12, terminal, block, obstacles);
         VerticalObstacle(45, 1, 12, terminal, block, obstacles);//top right mid divider
         VerticalObstacle(45, 19, 15, terminal, block, obstacles);
-
         //Tobbe jobbar end
 
-        //position för bomben
-        Position bombPosition = new Position(45, 15);
-        terminal.setCursorPosition(bombPosition.x, bombPosition.y);
-        terminal.putCharacter(bomb);
+        //position för buggen
+        Position bugPosition = new Position(45, 15);
+        terminal.setCursorPosition(bugPosition.x, bugPosition.y);
+        terminal.putCharacter(bug);
         terminal.flush();
 
         boolean continueReadingInput = true;
@@ -93,13 +92,12 @@ public class Main {
 
             KeyStroke keyStroke = null;
             do {
-                Thread.sleep(5); // might throw InterruptedException
+                Thread.sleep(5);
                 keyStroke = terminal.pollInput();
             } while (keyStroke == null);
 
-
             KeyType type = keyStroke.getKeyType();
-            Character c = keyStroke.getCharacter(); // used Character instead of char because it might be null
+            Character c = keyStroke.getCharacter();
 
             System.out.println("keyStroke.getKeyType(): " + type
                     + " keyStroke.getCharacter(): " + c);
@@ -165,60 +163,59 @@ public class Main {
                 terminal.setCursorPosition(oldX, oldY); // move cursor to old position
                 terminal.putCharacter(' '); // clean up by printing space on old position
                 terminal.setCursorPosition(x, y);
-                terminal.putCharacter(player);
+                terminal.putCharacter(dev);
             }
 
             //handling monsters
-            for (Position monster : monsters) {
-                terminal.setCursorPosition(monster.x, monster.y);
+            for (Position d : deadline) {
+                terminal.setCursorPosition(d.x, d.y);
                 terminal.putCharacter(' ');
 
-                int oldMonterX=monster.x;
-                int oldMonterY=monster.y;
+                int oldDeadX=d.x;
+                int oldDeadY=d.y;
 
-                if (x > monster.x) {
-                    monster.x++;
-                } else if (x < monster.x) {
-                    monster.x--;
+                if (x > d.x) {
+                    d.x++;
+                } else if (x < d.x) {
+                    d.x--;
                 }
-                if (y > monster.y) {
-                    monster.y++;
-                } else if (y < monster.y) {
-                    monster.y--;
+                if (y > d.y) {
+                    d.y++;
+                } else if (y < d.y) {
+                    d.y--;
                 }
                 boolean monsterCrashIntoObstacle = false;
                 for (Position p : obstacles) {
-                    if (p.x == monster.x && p.y == monster.y) {
+                    if (p.x == d.x && p.y == d.y) {
                         monsterCrashIntoObstacle = true;
                     }
                 }
                 if (monsterCrashIntoObstacle) {
-                    monster.x = oldMonterX-1;
-                    monster.y = oldMonterY;
+                    d.x = oldDeadX-1;
+                    d.y = oldDeadY;
                 } else {
-                    terminal.setCursorPosition(oldMonterX, oldMonterY); // move cursor to old position
+                    terminal.setCursorPosition(oldDeadX, oldDeadY); // move cursor to old position
                     terminal.putCharacter(' '); // clean up by printing space on old position
-                    terminal.setCursorPosition(monster.x, monster.y);
+                    terminal.setCursorPosition(d.x, d.y);
                     terminal.putCharacter('\u231b');
                 }
 
-                terminal.setCursorPosition(monster.x, monster.y);
+                terminal.setCursorPosition(d.x, d.y);
                 terminal.putCharacter('\u231b');
             }
-
-            // check if player runs into the bomb
-            if (bombPosition.x == x && bombPosition.y == y) {
-                terminal.setCursorPosition(bombPosition.x, bombPosition.y);
-                terminal.putCharacter(bomb);
+            // checkar om spelar går in i en bug(bomb)
+            if (bugPosition.x == x && bugPosition.y == y) {
+                terminal.setCursorPosition(bugPosition.x, bugPosition.y);
+                terminal.putCharacter(bug);
                 terminal.bell();
                 GameOver(terminal, tg, score);
                 //terminal.close();
                 continueReadingInput = false;
             }
 
-                // Is the player alive?
-                for (Position monster : monsters) {
-                    if (monster.x == x && monster.y == y) {
+                // Checkar spelaren mot monster
+                for (Position d : deadline) {
+                    if (d.x == x && d.y == y) {
                         continueReadingInput = false;
                         terminal.bell();
                         System.out.println("Game Over!");
@@ -237,9 +234,7 @@ public class Main {
                 obstacles.add(new Position(x, y));
                 x++;
                 //obstacles[count] = new Position(x+i, y);
-
             }
-
             // Use obstacles array to print to lanterna
             for (Position p : obstacles) {
                 terminal.setCursorPosition(p.x, p.y);
@@ -248,14 +243,12 @@ public class Main {
         }
         public static void VerticalObstacle ( int x, int y, int length, Terminal terminal,char block, List<
         Position > obstacles  ) throws IOException {
-
             // Create obstacles array
             for (int i = 0; i < length; i++) {
                 obstacles.add(new Position(x, y));
                 y++;
                 //obstacles[count] = new Position(x+i, y);
             }
-
             // Use obstacles array to print to lanterna
             for (Position p : obstacles) {
                 terminal.setCursorPosition(p.x, p.y);
@@ -264,31 +257,31 @@ public class Main {
         }
         public static void GameOver (Terminal terminal, TextGraphics tg, int score) throws Exception
     {
-                for (TextColor.ANSI bgc : TextColor.ANSI.values()) {
-                    tg.setBackgroundColor(bgc);
-                    tg.fill(' ');
-                    terminal.flush();
-                    Thread.sleep(100);
 
-                    String gameOver = "GAME OVER!";
-                    for (int i = 0; i < gameOver.length(); i++) {
-                        terminal.setCursorPosition(i + 35, 10);
-                        terminal.putCharacter(gameOver.charAt(i));
-                    }
-
-                    String scoreHeader = "Score: ";
-                    for (int i = 0; i < scoreHeader.length(); i++) {
-                        terminal.setCursorPosition(35 + i, 14);
-                        terminal.putCharacter(scoreHeader.charAt(i));
-                    }
-                    String scoreString = Integer.toString(score);
-                    for (int i = 0; i < scoreString.length(); i++)
-                    {
-                        terminal.setCursorPosition(i + 42, 14);
-                        terminal.putCharacter(scoreString.charAt(i));
-                    }
-                    terminal.flush();
-
-                }
+        //Printar ut olika färger när gameover
+        for (TextColor.ANSI bgc : TextColor.ANSI.values()) {
+            tg.setBackgroundColor(bgc);
+            tg.fill(' ');
+            terminal.flush();
+            Thread.sleep(100);
+        //Printar ut game over och score
+            String gameOver = "GAME OVER!";
+            for (int i = 0; i < gameOver.length(); i++) {
+                terminal.setCursorPosition(i + 35, 10);
+                terminal.putCharacter(gameOver.charAt(i));
+            }
+            String scoreHeader = "Score: ";
+            for (int i = 0; i < scoreHeader.length(); i++) {
+                terminal.setCursorPosition(35 + i, 14);
+                terminal.putCharacter(scoreHeader.charAt(i));
+            }
+            String scoreString = Integer.toString(score);
+            for (int i = 0; i < scoreString.length(); i++)
+            {
+                terminal.setCursorPosition(i + 42, 14);
+                terminal.putCharacter(scoreString.charAt(i));
+            }
+            terminal.flush();
+        }
     }
 }
