@@ -1,6 +1,4 @@
 package org.example;
-
-
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
@@ -9,7 +7,6 @@ import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 import java.util.ArrayList;
 import java.util.List;
-
 import java.io.IOException;
 
 public class Main {
