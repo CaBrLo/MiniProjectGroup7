@@ -211,7 +211,7 @@ public class Main {
                 terminal.setCursorPosition(bombPosition.x, bombPosition.y);
                 terminal.putCharacter(bomb);
                 terminal.bell();
-                GameOver(terminal, tg);
+                GameOver(terminal, tg, score);
                 //terminal.close();
                 continueReadingInput = false;
             }
@@ -222,7 +222,7 @@ public class Main {
                         continueReadingInput = false;
                         terminal.bell();
                         System.out.println("Game Over!");
-                        GameOver(terminal, tg);
+                        GameOver(terminal, tg, score);
                     }
                 }
                 terminal.flush();
@@ -262,7 +262,7 @@ public class Main {
                 terminal.putCharacter(block);
             }
         }
-        public static void GameOver (Terminal terminal, TextGraphics tg) throws Exception
+        public static void GameOver (Terminal terminal, TextGraphics tg, int score) throws Exception
     {
                 for (TextColor.ANSI bgc : TextColor.ANSI.values()) {
                     tg.setBackgroundColor(bgc);
@@ -275,6 +275,20 @@ public class Main {
                         terminal.setCursorPosition(i + 35, 10);
                         terminal.putCharacter(gameOver.charAt(i));
                     }
+
+                    String scoreHeader = "Score: ";
+                    for (int i = 0; i < scoreHeader.length(); i++) {
+                        terminal.setCursorPosition(35 + i, 14);
+                        terminal.putCharacter(scoreHeader.charAt(i));
+                    }
+                    String scoreString = Integer.toString(score);
+                    for (int i = 0; i < scoreString.length(); i++)
+                    {
+                        terminal.setCursorPosition(i + 42, 14);
+                        terminal.putCharacter(scoreString.charAt(i));
+                    }
+                    terminal.flush();
+
                 }
     }
 }
