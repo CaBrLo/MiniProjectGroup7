@@ -93,12 +93,8 @@ public class Main {
         //Tobbe jobbar end
 
         //random position för bomben
-        Random r = new Random();
-        Position bombPosition = new Position(r.nextInt(80), r.nextInt(24));
-
-
+        Position bombPosition = new Position(45, 15);
         terminal.setCursorPosition(bombPosition.x, bombPosition.y);
-
         terminal.putCharacter(bomb);
 
         terminal.flush();
@@ -225,8 +221,6 @@ public class Main {
 
             // check if player runs into the bomb
             if (bombPosition.x == x && bombPosition.y == y) {
-                Random l = new Random();
-
                 terminal.setCursorPosition(bombPosition.x, bombPosition.y);
 
                 terminal.putCharacter(bomb);
