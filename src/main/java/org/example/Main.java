@@ -1,18 +1,13 @@
 package org.example;
 
 
-import com.googlecode.lanterna.SGR;
-import com.googlecode.lanterna.Symbols;
-import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
-import com.googlecode.lanterna.graphics.TextImage;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 
-import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -189,18 +184,6 @@ public class Main {
                 terminal.setCursorPosition(x, y);
                 terminal.putCharacter(player);
             }
-            // check if player runs into the bomb
-            if (bombPosition.x == x && bombPosition.y == y) {
-                Random l = new Random();
-
-                terminal.setCursorPosition(bombPosition.x, bombPosition.y);
-
-                terminal.putCharacter(bomb);
-                terminal.bell();
-                terminal.close();
-                continueReadingInput = false;
-            }
-
 
             //handling monsters
             for (Position monster : monsters) {
@@ -240,6 +223,18 @@ public class Main {
                 terminal.putCharacter('X');
             }
 
+            // check if player runs into the bomb
+            if (bombPosition.x == x && bombPosition.y == y) {
+                Random l = new Random();
+
+                terminal.setCursorPosition(bombPosition.x, bombPosition.y);
+
+                terminal.putCharacter(bomb);
+                terminal.bell();
+                GameOver(terminal, tg);
+                //terminal.close();
+                continueReadingInput = false;
+            }
 
                 // Is the player alive?
                 for (Position monster : monsters) {
@@ -247,25 +242,9 @@ public class Main {
                         continueReadingInput = false;
                         terminal.bell();
                         System.out.println("Game Over!");
-
-                        for (TextColor.ANSI bgc : TextColor.ANSI.values()) {
-                            tg.setBackgroundColor(bgc);
-                            tg.fill(' ');
-                            terminal.flush();
-                            Thread.sleep(100);
-
-                            String gameOver = "GAME OVER!";
-                            for(int i = 0; i < gameOver.length(); i++)
-                            {
-                                terminal.setCursorPosition(i+35, 10);
-                                terminal.putCharacter(gameOver.charAt(i));
-                            }
-
-                        }
-
+                        GameOver(terminal, tg);
                     }
                 }
-
                 terminal.flush();
             }
 
@@ -304,4 +283,19 @@ public class Main {
                 terminal.putCharacter(block);
             }
         }
+        public static void GameOver (Terminal terminal, TextGraphics tg) throws Exception
+    {
+                for (TextColor.ANSI bgc : TextColor.ANSI.values()) {
+                    tg.setBackgroundColor(bgc);
+                    tg.fill(' ');
+                    terminal.flush();
+                    Thread.sleep(100);
+
+                    String gameOver = "GAME OVER!";
+                    for (int i = 0; i < gameOver.length(); i++) {
+                        terminal.setCursorPosition(i + 35, 10);
+                        terminal.putCharacter(gameOver.charAt(i));
+                    }
+                }
     }
+}
