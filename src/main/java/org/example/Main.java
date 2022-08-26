@@ -253,6 +253,14 @@ public class Main {
                             tg.fill(' ');
                             terminal.flush();
                             Thread.sleep(100);
+
+                            String gameOver = "GAME OVER!";
+                            for(int i = 0; i < gameOver.length(); i++)
+                            {
+                                terminal.setCursorPosition(i+35, 10);
+                                terminal.putCharacter(gameOver.charAt(i));
+                            }
+
                         }
 
                     }
