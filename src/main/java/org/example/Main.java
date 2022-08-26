@@ -7,12 +7,8 @@ import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
-
 import java.util.ArrayList;
 import java.util.List;
-
-
-import java.util.Random;
 
 import java.io.IOException;
 
@@ -27,10 +23,7 @@ public class Main {
         int y = 2;
         final char player = '\u263a';
         final char block = '\u2588';
-        final char bomb = 'O';
-
-        // färg och design?
-
+        final char bomb = '¤';
 
         terminal.setCursorPosition(x, y);
         terminal.putCharacter(player);
@@ -70,7 +63,6 @@ public class Main {
         List<Position> monsters = new ArrayList<>();
         monsters.add(new Position(23, 21));
 
-
         //Tobbe jobbar start
         List<Position> obstacles = new ArrayList<>();
         //Position[] obstacles = new Position[10];
@@ -92,13 +84,11 @@ public class Main {
 
         //Tobbe jobbar end
 
-        //random position för bomben
+        //position för bomben
         Position bombPosition = new Position(45, 15);
         terminal.setCursorPosition(bombPosition.x, bombPosition.y);
         terminal.putCharacter(bomb);
-
         terminal.flush();
-
 
         boolean continueReadingInput = true;
 
@@ -148,7 +138,7 @@ public class Main {
             }
 
 
-// Score & points start (Caroline)
+            // Score & points start (Caroline)
             for (Position p : fivePoints) {
                 if (p.x == x && p.y == y) {
                     score += 5;
@@ -212,17 +202,16 @@ public class Main {
                     terminal.setCursorPosition(oldMonterX, oldMonterY); // move cursor to old position
                     terminal.putCharacter(' '); // clean up by printing space on old position
                     terminal.setCursorPosition(monster.x, monster.y);
-                    terminal.putCharacter('X');
+                    terminal.putCharacter('\u231b');
                 }
 
                 terminal.setCursorPosition(monster.x, monster.y);
-                terminal.putCharacter('X');
+                terminal.putCharacter('\u231b');
             }
 
             // check if player runs into the bomb
             if (bombPosition.x == x && bombPosition.y == y) {
                 terminal.setCursorPosition(bombPosition.x, bombPosition.y);
-
                 terminal.putCharacter(bomb);
                 terminal.bell();
                 GameOver(terminal, tg);
@@ -268,7 +257,6 @@ public class Main {
                 obstacles.add(new Position(x, y));
                 y++;
                 //obstacles[count] = new Position(x+i, y);
-
             }
 
             // Use obstacles array to print to lanterna
