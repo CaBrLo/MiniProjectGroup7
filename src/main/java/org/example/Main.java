@@ -56,9 +56,9 @@ public class Main {
         }
         //Score and points end
 
-        //monsters
-        List<Position> deadline = new ArrayList<>();
-        deadline.add(new Position(23, 21));
+        //deadlines
+        List<Position> deadlines = new ArrayList<>();
+        deadlines.add(new Position(23, 21));
 
         //Tobbe jobbar start spelplan
         List<Position> obstacles = new ArrayList<>();
@@ -166,44 +166,44 @@ public class Main {
                 terminal.putCharacter(dev);
             }
 
-            //handling monsters
-            for (Position d : deadline) {
-                terminal.setCursorPosition(d.x, d.y);
+            //handling deadlines
+            for (Position deadline : deadlines) {
+                terminal.setCursorPosition(deadline.x, deadline.y);
                 terminal.putCharacter(' ');
 
-                int oldDeadX=d.x;
-                int oldDeadY=d.y;
+                int oldDeadlineX=deadline.x;
+                int oldDeadlineY=deadline.y;
 
-                if (x > d.x) {
-                    d.x++;
-                } else if (x < d.x) {
-                    d.x--;
+                if (x > deadline.x) {
+                    deadline.x++;
+                } else if (x < deadline.x) {
+                    deadline.x--;
                 }
-                if (y > d.y) {
-                    d.y++;
-                } else if (y < d.y) {
-                    d.y--;
+                if (y > deadline.y) {
+                    deadline.y++;
+                } else if (y < deadline.y) {
+                    deadline.y--;
                 }
-                boolean monsterCrashIntoObstacle = false;
+                boolean deadlineCrashIntoObstacle = false;
                 for (Position p : obstacles) {
-                    if (p.x == d.x && p.y == d.y) {
-                        monsterCrashIntoObstacle = true;
+                    if (p.x == deadline.x && p.y == deadline.y) {
+                        deadlineCrashIntoObstacle = true;
                     }
                 }
-                if (monsterCrashIntoObstacle) {
-                    d.x = oldDeadX-1;
-                    d.y = oldDeadY;
+                if (deadlineCrashIntoObstacle) {
+                    deadline.x = oldDeadlineX-1;
+                    deadline.y = oldDeadlineY;
                 } else {
-                    terminal.setCursorPosition(oldDeadX, oldDeadY); // move cursor to old position
+                    terminal.setCursorPosition(oldDeadlineX, oldDeadlineY); // move cursor to old position
                     terminal.putCharacter(' '); // clean up by printing space on old position
-                    terminal.setCursorPosition(d.x, d.y);
+                    terminal.setCursorPosition(deadline.x, deadline.y);
                     terminal.putCharacter('\u231b');
                 }
 
-                terminal.setCursorPosition(d.x, d.y);
+                terminal.setCursorPosition(deadline.x, deadline.y);
                 terminal.putCharacter('\u231b');
             }
-            // checkar om spelar går in i en bug(bomb)
+            // checkar om developern går in i en bug(bomb)
             if (bugPosition.x == x && bugPosition.y == y) {
                 terminal.setCursorPosition(bugPosition.x, bugPosition.y);
                 terminal.putCharacter(bug);
@@ -213,9 +213,9 @@ public class Main {
                 continueReadingInput = false;
             }
 
-                // Checkar spelaren mot monster
-                for (Position d : deadline) {
-                    if (d.x == x && d.y == y) {
+                // Checkar developern mot deadlines
+                for (Position deadline : deadlines) {
+                    if (deadline.x == x && deadline.y == y) {
                         continueReadingInput = false;
                         terminal.bell();
                         System.out.println("Game Over!");
