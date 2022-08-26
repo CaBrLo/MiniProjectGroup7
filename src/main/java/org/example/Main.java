@@ -3,6 +3,7 @@ package org.example;
 
 import com.googlecode.lanterna.SGR;
 import com.googlecode.lanterna.Symbols;
+import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.graphics.TextImage;
@@ -24,10 +25,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory();
         Terminal terminal = terminalFactory.createTerminal();
-
         TextGraphics tg = terminal.newTextGraphics();
-
-
         terminal.setCursorVisible(false);
         // test comment
         int x = 2;
@@ -36,35 +34,37 @@ public class Main {
         final char block = '\u2588';
         final char bomb = 'O';
 
+        // färg och design?
+
+
         terminal.setCursorPosition(x, y);
         terminal.putCharacter(player);
 
         //Score and points start (Caroline)
         int score = 0;
         String scoreHeader = "Score: ";
-        for(int i = 0; i < scoreHeader.length(); i++)
-        {
-            terminal.setCursorPosition(68+i,0);
+        for (int i = 0; i < scoreHeader.length(); i++) {
+            terminal.setCursorPosition(68 + i, 0);
             terminal.putCharacter(scoreHeader.charAt(i));
         }
 
         List<Position> fivePoints = new ArrayList<>();
-        fivePoints.add(new Position(4,4));
+        fivePoints.add(new Position(4, 4));
         fivePoints.add(new Position(75, 10));
-        fivePoints.add(new Position(70,20));
-        fivePoints.add(new Position(60,10));
-        fivePoints.add(new Position(19,4));
+        fivePoints.add(new Position(70, 20));
+        fivePoints.add(new Position(60, 10));
+        fivePoints.add(new Position(19, 4));
         for (Position point : fivePoints) {
             terminal.setCursorPosition(point.x, point.y);
             terminal.putCharacter('$');
         }
 
         List<Position> tenPoints = new ArrayList<>();
-        tenPoints.add(new Position(8,4));
+        tenPoints.add(new Position(8, 4));
         tenPoints.add(new Position(25, 10));
-        tenPoints.add(new Position(10,20));
-        tenPoints.add(new Position(5,10));
-        tenPoints.add(new Position(72,8));
+        tenPoints.add(new Position(10, 20));
+        tenPoints.add(new Position(5, 10));
+        tenPoints.add(new Position(72, 8));
         for (Position point : tenPoints) {
             terminal.setCursorPosition(point.x, point.y);
             terminal.putCharacter('£');
@@ -75,30 +75,32 @@ public class Main {
         List<Position> monsters = new ArrayList<>();
         monsters.add(new Position(23, 21));
 
-        //Tobbe jobbar start
-        List<Position>obstacles=new ArrayList<>();
-        //Position[] obstacles = new Position[10];
-        HorizontalObstacle(0,1,80,terminal,block,obstacles);//top frame
-        HorizontalObstacle(0,23,80,terminal,block,obstacles);//bottom frame
-        HorizontalObstacle(5,6,20,terminal,block,obstacles);
-        HorizontalObstacle(5,19,20,terminal,block,obstacles);
-        HorizontalObstacle(55,6,20,terminal,block,obstacles);
-        HorizontalObstacle(55,19,20,terminal,block,obstacles);
 
-        VerticalObstacle(0,1,23,terminal,block,obstacles);//left frame
-        VerticalObstacle(79,1,23,terminal,block,obstacles);//right frame
-        VerticalObstacle(14,10,6,terminal,block,obstacles);
-        VerticalObstacle(65,10,6,terminal,block,obstacles);
-        VerticalObstacle(35,1,6,terminal,block,obstacles);//left mid divider
-        VerticalObstacle(35,13,12,terminal,block,obstacles);
-        VerticalObstacle(45,1,12,terminal,block,obstacles);//top right mid divider
-        VerticalObstacle(45,19,15,terminal,block,obstacles);
+        //Tobbe jobbar start
+        List<Position> obstacles = new ArrayList<>();
+        //Position[] obstacles = new Position[10];
+        HorizontalObstacle(0, 1, 80, terminal, block, obstacles);//top frame
+        HorizontalObstacle(0, 23, 80, terminal, block, obstacles);//bottom frame
+        HorizontalObstacle(5, 6, 20, terminal, block, obstacles);
+        HorizontalObstacle(5, 19, 20, terminal, block, obstacles);
+        HorizontalObstacle(55, 6, 20, terminal, block, obstacles);
+        HorizontalObstacle(55, 19, 20, terminal, block, obstacles);
+
+        VerticalObstacle(0, 1, 23, terminal, block, obstacles);//left frame
+        VerticalObstacle(79, 1, 23, terminal, block, obstacles);//right frame
+        VerticalObstacle(14, 10, 6, terminal, block, obstacles);
+        VerticalObstacle(65, 10, 6, terminal, block, obstacles);
+        VerticalObstacle(35, 1, 6, terminal, block, obstacles);//left mid divider
+        VerticalObstacle(35, 13, 12, terminal, block, obstacles);
+        VerticalObstacle(45, 1, 12, terminal, block, obstacles);//top right mid divider
+        VerticalObstacle(45, 19, 15, terminal, block, obstacles);
 
         //Tobbe jobbar end
 
         //random position för bomben
         Random r = new Random();
         Position bombPosition = new Position(r.nextInt(80), r.nextInt(24));
+
 
         terminal.setCursorPosition(bombPosition.x, bombPosition.y);
 
@@ -153,31 +155,30 @@ public class Main {
                     crashIntoObstacle = true;
                 }
             }
+
+
 // Score & points start (Caroline)
-            for (Position p : fivePoints){
-                if (p.x == x && p.y == y)
-                {
-                    score+=5;
+            for (Position p : fivePoints) {
+                if (p.x == x && p.y == y) {
+                    score += 5;
                     p.x = 0;    //moves the point's location to 0,0
                     p.y = 0;
                 }
             }
-            for (Position p : tenPoints){
-                if (p.x == x && p.y == y)
-                {
-                    score+=10;
+            for (Position p : tenPoints) {
+                if (p.x == x && p.y == y) {
+                    score += 10;
                     p.x = 0;    //moves the point's location to 0,0
                     p.y = 0;
                 }
             }
 
             String scoreString = Integer.toString(score);
-            for (int i = 0; i < scoreString.length(); i++)
-            {
-                terminal.setCursorPosition(75+i,0);
+            for (int i = 0; i < scoreString.length(); i++) {
+                terminal.setCursorPosition(75 + i, 0);
                 terminal.putCharacter(scoreString.charAt(i));
             }
-        // Score & points end
+            // Score & points end
 
             if (crashIntoObstacle) {
                 x = oldX;
@@ -191,7 +192,6 @@ public class Main {
             // check if player runs into the bomb
             if (bombPosition.x == x && bombPosition.y == y) {
                 Random l = new Random();
-                Position bombPosition1 = new Position(l.nextInt(20), l.nextInt(24));
 
                 terminal.setCursorPosition(bombPosition.x, bombPosition.y);
 
@@ -200,6 +200,7 @@ public class Main {
                 terminal.close();
                 continueReadingInput = false;
             }
+
 
             //handling monsters
             for (Position monster : monsters) {
@@ -211,14 +212,12 @@ public class Main {
 
                 if (x > monster.x) {
                     monster.x++;
-                }
-                else if (x < monster.x) {
+                } else if (x < monster.x) {
                     monster.x--;
                 }
                 if (y > monster.y) {
                     monster.y++;
-                }
-                else if (y < monster.y) {
+                } else if (y < monster.y) {
                     monster.y--;
                 }
                 boolean monsterCrashIntoObstacle = false;
@@ -228,7 +227,7 @@ public class Main {
                     }
                 }
                 if (monsterCrashIntoObstacle) {
-                    monster.x = oldMonterX;
+                    monster.x = oldMonterX-1;
                     monster.y = oldMonterY;
                 } else {
                     terminal.setCursorPosition(oldMonterX, oldMonterY); // move cursor to old position
@@ -241,49 +240,60 @@ public class Main {
                 terminal.putCharacter('X');
             }
 
-            // Is the player alive?
-            for (Position monster : monsters) {
-                if (monster.x == x && monster.y == y) {
-                    continueReadingInput = false;
-                    terminal.bell();
-                    System.out.println("Game Over!");
+
+                // Is the player alive?
+                for (Position monster : monsters) {
+                    if (monster.x == x && monster.y == y) {
+                        continueReadingInput = false;
+                        terminal.bell();
+                        System.out.println("Game Over!");
+
+                        for (TextColor.ANSI bgc : TextColor.ANSI.values()) {
+                            tg.setBackgroundColor(bgc);
+                            tg.fill(' ');
+                            terminal.flush();
+                            Thread.sleep(100);
+                        }
+
+                    }
                 }
+
+                terminal.flush();
             }
 
-            terminal.flush();
         }
+        public static void HorizontalObstacle ( int x, int y, int length, Terminal terminal,char block, List<
+        Position > obstacles  ) throws IOException {
 
+            // Create obstacles array
+            for (int i = 0; i < length; i++) {
+                obstacles.add(new Position(x, y));
+                x++;
+                //obstacles[count] = new Position(x+i, y);
+
+            }
+
+            // Use obstacles array to print to lanterna
+            for (Position p : obstacles) {
+                terminal.setCursorPosition(p.x, p.y);
+                terminal.putCharacter(block);
+            }
+        }
+        public static void VerticalObstacle ( int x, int y, int length, Terminal terminal,char block, List<
+        Position > obstacles  ) throws IOException {
+
+            // Create obstacles array
+            for (int i = 0; i < length; i++) {
+                obstacles.add(new Position(x, y));
+                y++;
+                //obstacles[count] = new Position(x+i, y);
+
+            }
+
+            // Use obstacles array to print to lanterna
+            for (Position p : obstacles) {
+                terminal.setCursorPosition(p.x, p.y);
+                terminal.putCharacter(block);
+            }
+        }
     }
-    public static void HorizontalObstacle(int x,int y,int length,Terminal terminal,char block, List<Position> obstacles  ) throws IOException {
-
-        // Create obstacles array
-        for(int i = 0;i<length;i++){
-            obstacles.add(new Position(x,y));
-            x++;
-            //obstacles[count] = new Position(x+i, y);
-
-        }
-
-        // Use obstacles array to print to lanterna
-        for (Position p : obstacles) {
-            terminal.setCursorPosition(p.x, p.y);
-            terminal.putCharacter(block);
-        }
-    }
-    public static void VerticalObstacle(int x,int y,int length,Terminal terminal,char block, List<Position> obstacles  ) throws IOException {
-
-        // Create obstacles array
-        for(int i = 0;i<length;i++){
-            obstacles.add(new Position(x,y));
-            y++;
-            //obstacles[count] = new Position(x+i, y);
-
-        }
-
-        // Use obstacles array to print to lanterna
-        for (Position p : obstacles) {
-            terminal.setCursorPosition(p.x, p.y);
-            terminal.putCharacter(block);
-        }
-    }
-}
