@@ -73,7 +73,7 @@ public class Main {
 
         //monsters
         List<Position> monsters = new ArrayList<>();
-        monsters.add(new Position(23, 23));
+        monsters.add(new Position(23, 21));
 
         //Tobbe jobbar start
         List<Position>obstacles=new ArrayList<>();
@@ -206,6 +206,9 @@ public class Main {
                 terminal.setCursorPosition(monster.x, monster.y);
                 terminal.putCharacter(' ');
 
+                int oldMonterX=monster.x;
+                int oldMonterY=monster.y;
+
                 if (x > monster.x) {
                     monster.x++;
                 }
@@ -217,6 +220,21 @@ public class Main {
                 }
                 else if (y < monster.y) {
                     monster.y--;
+                }
+                boolean monsterCrashIntoObstacle = false;
+                for (Position p : obstacles) {
+                    if (p.x == monster.x && p.y == monster.y) {
+                        monsterCrashIntoObstacle = true;
+                    }
+                }
+                if (monsterCrashIntoObstacle) {
+                    monster.x = oldMonterX;
+                    monster.y = oldMonterY;
+                } else {
+                    terminal.setCursorPosition(oldMonterX, oldMonterY); // move cursor to old position
+                    terminal.putCharacter(' '); // clean up by printing space on old position
+                    terminal.setCursorPosition(monster.x, monster.y);
+                    terminal.putCharacter('X');
                 }
 
                 terminal.setCursorPosition(monster.x, monster.y);
